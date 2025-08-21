@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import tripRoutes from "./src/routes/tripRoutes.js";
 import hotelRoutes from "./src/routes/hotelRoutes.js";
@@ -10,8 +13,13 @@ import chatRoutes from "./src/routes/chatRoutes.js"
 
 const app = express();
 
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+const corsOptions = {
+        origin: allowedOrigin,
+        optionsSuccessStatus: 200 // For legacy browser support
+    };
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 
