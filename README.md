@@ -5,7 +5,7 @@ It provides REST APIs for managing trips, hotels, tourist attractions, and chatb
 
 ## Live Demo
 
-Check out the live site:
+Check out the live site: https://travelgo-client.onrender.com/
 
 ## Features
 
@@ -38,6 +38,7 @@ Check out the live site:
 3. Create a `.env` file in the root directory and add the necessary environment variables:
     ```env
     FRONTEND_URL= your_frontend_url
+    PORT = 5000
     ```
 
 4. Start the server
