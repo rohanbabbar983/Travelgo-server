@@ -9,6 +9,15 @@ export const trips = [
     description: "Explore the snow-capped Himalayas with guided treks, river rafting, and cozy stays."
   },
   {
+    id: 900,
+    city: "Delhi",
+    title: "Red Fort",
+    duration: "5 Days",
+    price: 12000,
+    image: "https://images.unsplash.com/photo-1603275628141-0f1c995d91a3?q=80&w=1600&auto=format&fit=crop",
+    description: "Explore the snow-capped Himalayas with guided treks, river rafting, and cozy stays."
+  },
+  {
     id: 2,
     city: "Goa",
     title: "Beach Paradise",
