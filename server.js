@@ -16,21 +16,19 @@ const app = express();
 const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
 const corsOptions = {
         origin: allowedOrigin,
-        optionsSuccessStatus: 200 // For legacy browser support
+        optionsSuccessStatus: 200 
     };
-// Middleware
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Routes
 app.use("/api/trips", tripRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/attractions", attractionRoutes);
-app.use("/api/assist", chatRoutes);           // ← chatbot endpoint
+app.use("/api/assist", chatRoutes);          
 
 
-// Error Handler
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

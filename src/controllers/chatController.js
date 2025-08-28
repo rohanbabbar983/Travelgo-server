@@ -1,4 +1,3 @@
-// src/controllers/chatController.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { trips } from "../data/trips.js";
 import { hotels } from "../data/hotels.js";
@@ -54,7 +53,6 @@ function buildContext(city) {
   `;
 }
 
-// ---- LLM bootstrap (lazy; avoids env race) ----
 function getGeminiModel() {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
@@ -62,9 +60,7 @@ function getGeminiModel() {
   const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
   return genAI.getGenerativeModel({ model: modelName });
 }
-// ----------------------------------------------
 
-// Robustly extract the first JSON object from raw model text
 function parseLLMJson(raw) {
   if (!raw) return null;
 
@@ -96,16 +92,13 @@ function parseLLMJson(raw) {
   }
 }
 
-// Minimal schema hardening so frontend never breaks
 function coerceToUIShape(obj, city) {
   if (!obj || typeof obj !== "object") return null;
 
-  // allow only "list" or "text"
   if (obj.type !== "list" && obj.type !== "text") obj.type = "text";
 
   if (obj.type === "list") {
     obj.header = obj.header ?? (city ? `Results in ${city}` : "Results");
-    // items: normalize
     if (!Array.isArray(obj.items)) obj.items = [];
     obj.items = obj.items
       .filter(Boolean)
@@ -115,15 +108,12 @@ function coerceToUIShape(obj, city) {
       }))
       .filter((it) => it.title);
 
-    // CTA default if city known
     if (!obj.cta && city) {
       obj.cta = { label: `Open ${city} page`, to: `/city/${encodeURIComponent(city)}` };
     }
   } else {
-    // text response
     obj.text = String(obj.text ?? "").trim() || "Sorry, I couldn’t find anything relevant.";
   }
-
   return obj;
 }
 
@@ -145,7 +135,6 @@ export async function askAssistant(req, res, next) {
     const context = city ? buildContext(city) : buildFullContext();
 
 
-    // Stricter instruction: RAW JSON ONLY
     const prompt = `
 You are a travel assistant. Use ONLY the given dataset context to answer.
 NEVER invent cities or items outside the dataset.
@@ -163,6 +152,7 @@ Infer constraints from the user text:
   • For hotels compare "pricePerNight" to budget.
 - region cues like "south india", "north india", etc. Prefer cities that match those regions 
   (e.g., Bengaluru/Chennai = south india; Delhi/Agra/Jaipur/Manali = north india; Mumbai/Goa = west india).
+- season cues like "summer", "monsoon" , "spring" etc. Prefer cities that are best suited in that weather.
 - if user mentions a city, prefer that city.
 
 Select items ONLY from the Context lists above that best satisfy the inferred constraints.
@@ -212,7 +202,6 @@ Examples:
       });
     }
 
-    // Robust parse
     const parsed = parseLLMJson(rawText) ?? { type: "text", text: rawText };
     const safe = coerceToUIShape(parsed, city);
 
