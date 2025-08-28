@@ -153,6 +153,7 @@ Infer constraints from the user text:
 - region cues like "south india", "north india", etc. Prefer cities that match those regions 
   (e.g., Bengaluru/Chennai = south india; Delhi/Agra/Jaipur/Manali = north india; Mumbai/Goa = west india).
 - season cues like "summer", "monsoon" , "spring" etc. Prefer cities that are best suited in that weather.
+  (e.g., Manali/Goa/London/Paris = summer , Jaipur/Delhi/Dubai= winter, Paris/London/Manali=spring, Goa/Mumbai/Manali=monsoon).
 - if user mentions a city, prefer that city.
 
 Select items ONLY from the Context lists above that best satisfy the inferred constraints.
